@@ -6,9 +6,11 @@ from record_module import record_main
 
 STANDARD_RECORD_AUDIO = "standard_audio.wav"
 MY_RECORD_AUDIO = "record_audio.wav"
+OWN_CONTEXT = "own.txt"
 init()
 
-def split_standard_audio(standard_audio,start_time, end_time):
+
+def split_standard_audio(standard_audio, start_time, end_time):
     """
     Split an audio file based on start and end timestamps.
 
@@ -23,33 +25,47 @@ def split_standard_audio(standard_audio,start_time, end_time):
     ffmpeg.input(standard_audio, ss=start_time, to=end_time).output(
         STANDARD_RECORD_AUDIO).run(overwrite_output=True)
 
+
 def colorize_text(text):
     pattern = r'\[(.*?)\]'
     colored_text = ''
     last_end = 0
-    
+
     for match in re.finditer(pattern, text):
         start, end = match.span()
         colored_text += Fore.GREEN + text[last_end:start] + Style.RESET_ALL
         colored_text += Fore.RED + '[' + match.group(1) + ']' + Style.RESET_ALL
         last_end = end
-    
+
     colored_text += Fore.GREEN + text[last_end:] + Style.RESET_ALL
     return colored_text
 
+
+def using_own_passage(text_file):
+    with open(text_file, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+    content = content.replace('\n', '').replace('\r', '')
+
+    return content
+
+
 if __name__ == "__main__":
     """Split your standard audio if you need it"""
-    # split_standard_audio('2007.12CET4.wma', "13:28", "13:51")
+    split_standard_audio('2007.06CET4.wma', "22:15", "24:40")
+    
+    """Use your audio"""
     standard_res = recognize_audio(STANDARD_RECORD_AUDIO)["text"]
-    print("\n Your standard passage is:\n",standard_res,"\n")
+    """Use your text"""
+    # standard_res = using_own_passage(OWN_CONTEXT)
+    
+    print("\n Your standard passage is:\n", standard_res, "\n")
     input("Please ready to read the passage... press any key to start...\n")
     
-    """read your passage"""
+    """Read your passage"""
     record_main(MY_RECORD_AUDIO)
     my_res = recognize_audio(MY_RECORD_AUDIO)["text"]
     print("Analysis result:\n")
     compare_res = compare_texts(standard_res, my_res)
     print_compare_res = colorize_text(compare_res)
-    print(print_compare_res,"\n")
-
-    
+    print(print_compare_res, "\n")

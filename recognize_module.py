@@ -13,31 +13,31 @@ def recognize_audio(filename):
     return result
 
 
+from Levenshtein import distance as lev_distance
+
 def compare_texts(reference, hypothesis):
-    diff = difflib.ndiff(reference.split(), hypothesis.split())
-
+    ref_words = reference.split()
+    hyp_words = hypothesis.split()
+    
+    
+    diff = difflib.SequenceMatcher(None, ref_words, hyp_words)
+    
     result = []
-    added_words = []
-    removed_words = []
-
-    for word in diff:
-        if word.startswith('+ '):
-            # error word
-            added_words.append(word[2:])
-        elif word.startswith('- '):
-            # error word
-            removed_words.append(word[2:])
-        else:
-            # unchanged
-            if added_words or removed_words:
-                result.append(
-                    f"[{'/'.join(removed_words)} -> {'/'.join(added_words)}]")
-                added_words = []
-                removed_words = []
-            result.append(word[2:])
-
-    if added_words or removed_words:
-        result.append(
-            f"[{'/'.join(removed_words)} -> {'/'.join(added_words)}]")
-
+    for tag, i1, i2, j1, j2 in diff.get_opcodes():
+        if tag == 'replace':
+            for ref_word, hyp_word in zip(ref_words[i1:i2], hyp_words[j1:j2]):
+                if lev_distance(ref_word, hyp_word) <= len(ref_word) // 2:  
+                    result.append(f"[{ref_word} -> {hyp_word}]")
+                else:
+                    result.append(f"[{ref_word} -> ]")
+                    result.append(f"[ -> {hyp_word}]")
+        elif tag == 'delete':
+            for ref_word in ref_words[i1:i2]:
+                result.append(f"[{ref_word} -> ]")
+        elif tag == 'insert':
+            for hyp_word in hyp_words[j1:j2]:
+                result.append(f"[ -> {hyp_word}]")
+        else:  # equal
+            result.extend(ref_words[i1:i2])
+    
     return ' '.join(result)
