@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # split_standard_audio('2007.12CET4.wma', "13:28", "13:51")
     standard_res = recognize_audio(STANDARD_RECORD_AUDIO)["text"]
     print("\n Your standard passage is:\n",standard_res,"\n")
-    input("Please ready to read the passage... press any key to staert...\n")
+    input("Please ready to read the passage... press any key to start...\n")
     
     """read your passage"""
     record_main(MY_RECORD_AUDIO)
