@@ -23,7 +23,7 @@ The script is to correct your pronunciation in your spoken English.
 
 The green part is correct, and the red part is incorrect.
 It may be differences in details, but practice in daily life should be sufficient. Our focus is on being brave enough to speak up, and what needs to be corrected is obvious errors (i.e. incorrect pronunciation that even AI cannot recognize).
-![alt text](image.png)
+![1720535904844](images/README/1720535904844.png)
 
 ![1720264136298](images/README/1720264136298.png)
 

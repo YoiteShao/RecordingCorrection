@@ -52,20 +52,20 @@ def using_own_passage(text_file):
 
 if __name__ == "__main__":
     """Split your standard audio if you need it"""
-    split_standard_audio('2007.06CET4.wma', "22:15", "24:40")
-    
+    # split_standard_audio('2007.06CET4.wma', "22:15", "24:40")
+
     """Use your audio"""
-    standard_res = recognize_audio(STANDARD_RECORD_AUDIO)["text"]
+    # standard_res = recognize_audio(STANDARD_RECORD_AUDIO)["text"]
     """Use your text"""
-    # standard_res = using_own_passage(OWN_CONTEXT)
-    
+    standard_res = using_own_passage(OWN_CONTEXT)
+
     print("\n Your standard passage is:\n", standard_res, "\n")
     input("Please ready to read the passage... press any key to start...\n")
-    
+
     """Read your passage"""
     record_main(MY_RECORD_AUDIO)
     my_res = recognize_audio(MY_RECORD_AUDIO)["text"]
-    print("Analysis result:\n")
+    print("Your recognization result:", my_res, ":\n:\nAnalysis result:\n")
     compare_res = compare_texts(standard_res, my_res)
     print_compare_res = colorize_text(compare_res)
     print(print_compare_res, "\n")
