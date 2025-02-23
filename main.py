@@ -1,8 +1,12 @@
+import warnings
 import re
 import ffmpeg
 from colorama import init, Fore, Style
 from recognize_module import recognize_audio, compare_texts
 from record_module import record_main
+
+# 在文件开头添加这行代码来过滤警告
+warnings.filterwarnings('ignore', category=FutureWarning, module='whisper')
 
 STANDARD_RECORD_AUDIO = "standard_audio.wav"
 MY_RECORD_AUDIO = "record_audio.wav"
@@ -59,13 +63,13 @@ if __name__ == "__main__":
     """Use your text"""
     standard_res = using_own_passage(OWN_CONTEXT)
 
-    print("\n Your standard passage is:\n", standard_res, "\n")
+    # print("\n Your standard passage is:\n", standard_res, "\n")
     input("Please ready to read the passage... press any key to start...\n")
 
     """Read your passage"""
     record_main(MY_RECORD_AUDIO)
     my_res = recognize_audio(MY_RECORD_AUDIO)["text"]
-    print("Your recognization result:", my_res, ":\n:\nAnalysis result:\n")
+    # print("Your recognization result:", my_res, ":\n:\nAnalysis result:\n")
     compare_res = compare_texts(standard_res, my_res)
     print_compare_res = colorize_text(compare_res)
     print(print_compare_res, "\n")
